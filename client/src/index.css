@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.wrapper{
+    max-width: 1150px;
+    margin: 0 auto;
+    
+}
+
+.mainSideBar::-webkit-scrollbar-thumb {
+    background: #F2F2F3;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+
+.mainSideBar::-webkit-scrollbar {
+    background-color: transparent;
+    width: 5px;
+   }
+
+.posts::-webkit-scrollbar {
+    background-color: transparent;
+    width: 0px;
+   }
