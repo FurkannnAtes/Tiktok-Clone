@@ -1,27 +1,31 @@
 import React, { useState } from "react";
 import { GoogleLogin } from "@react-oauth/google";
-//icons
-import { FaTiktok } from "react-icons/fa";
-import { AiOutlinePlus } from "react-icons/ai";
-import { BsSearch } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import { createOrGetUser, logout } from "../../store/Auth";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+//icons
+import { FaTiktok } from "react-icons/fa";
+import { AiOutlinePlus, AiOutlineUser } from "react-icons/ai";
+import { BsFillTriangleFill, BsSearch } from "react-icons/bs";
+import { BiLogOut } from "react-icons/bi";
 
 const Navbar = () => {
   const [authBtn, setAuthBtn] = useState(false);
-  const [profileBtn, setProfileBtn] = useState(false);
 
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
-
+  const location = useLocation();
   return (
     <div className=" border-b  border-[1px]">
-      <div className="wrapper flex justify-between items-center px-5 h-[9vh]">
-        <div className="flex gap-2 items-center">
+      <div
+        className={`${
+          location.pathname === "/" ? " wrapper" : ""
+        }  flex justify-between items-center px-5 h-[9vh]`}
+      >
+        <Link to="/" className="flex gap-2 items-center">
           <FaTiktok className="text-2xl" />
           <div className="text-3xl font-extrabold">TikTok</div>
-        </div>
+        </Link>
         <div className="overflow-hidden hidden md:flex  items-center bg-[#F1F1F2]  rounded-full border py-0 pl-5">
           <input
             placeholder="Search"
@@ -41,22 +45,31 @@ const Navbar = () => {
             <div>Upload</div>
           </button>
           {user.name ? (
-            <div onMos className="relative">
+            <div className="relative group">
               <img
-                onClick={() => setProfileBtn(profileBtn ? false : true)}
                 className="w-10 h-10 rounded-full cursor-pointer"
                 src={user.picture}
                 alt=""
               />
               <div
-                className={`${
-                  profileBtn ? "flex" : "hidden"
-                } absolute top-full left-1/2 -translate-x-1/2 z-30 p-2 border bg-white flex flex-col gap-2 w-[100px]`}
+                className={`group-hover:flex group-hover:opacity-100 absolute top-[130%] right-0 z-30  shadow-lg bg-white hidden flex-col  w-[140px] rounded-lg `}
               >
-                <Link to="/">GO Profile</Link>
-                <div>
-                  {" "}
-                  <button onClick={() => dispatch(logout())}>Log out</button>
+                <div className="absolute bottom-full w-full  flex justify-end pr-3 text-white right-0">
+                  <BsFillTriangleFill />
+                </div>
+                <Link
+                  className="hover:bg-gray-100 duration-300 p-2 flex items-center gap-2"
+                  to={`/profile/${user.sub}`}
+                >
+                  <AiOutlineUser className="text-xl" />
+                  <div> Your Profile</div>
+                </Link>
+                <div
+                  onClick={() => dispatch(logout())}
+                  className="hover:bg-gray-100 duration-300 p-2 flex items-center gap-2 cursor-pointer"
+                >
+                  <BiLogOut className="text-xl" />
+                  <div>Log out</div>
                 </div>
               </div>
             </div>
@@ -81,7 +94,6 @@ const Navbar = () => {
             onSuccess={(credentialResponse) => {
               dispatch(createOrGetUser(credentialResponse));
               setAuthBtn(false);
-              setProfileBtn(false);
             }}
             onError={() => {
               console.log("Login Failed");

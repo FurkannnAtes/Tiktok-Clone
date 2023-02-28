@@ -28,3 +28,7 @@
     width: 0px;
    }
 
+.hideScroll::-webkit-scrollbar{
+    background-color: transparent;
+    width: 0px;
+   }
