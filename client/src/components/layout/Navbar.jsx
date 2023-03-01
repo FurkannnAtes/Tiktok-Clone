@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GoogleLogin } from "@react-oauth/google";
 import { useDispatch, useSelector } from "react-redux";
 import { createOrGetUser, logout } from "../../store/Auth";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 //icons
 import { FaTiktok } from "react-icons/fa";
 import { AiOutlinePlus, AiOutlineUser } from "react-icons/ai";
@@ -15,6 +15,23 @@ const Navbar = () => {
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
   const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user.name) {
+      navigate("/");
+    }
+  }, [navigate, user]);
+
+  //check user login
+  const handleUploadLink = () => {
+    if (user.name) {
+      navigate("/upload");
+    } else {
+      setAuthBtn(true);
+    }
+  };
+
   return (
     <div className=" border-b  border-[1px]">
       <div
@@ -42,7 +59,7 @@ const Navbar = () => {
         <div className="flex items-center gap-2">
           <button className="flex gap-2 justify-center items-center font-semibold border py-2 w-[130px] hover:bg-gray-200 duration-300">
             <AiOutlinePlus />
-            <div>Upload</div>
+            <div onClick={() => handleUploadLink()}>Upload</div>
           </button>
           {user.name ? (
             <div className="relative group">
@@ -54,7 +71,7 @@ const Navbar = () => {
               <div
                 className={`group-hover:flex group-hover:opacity-100 absolute top-[130%] right-0 z-30  shadow-lg bg-white hidden flex-col  w-[140px] rounded-lg `}
               >
-                <div className="absolute bottom-full w-full  flex justify-end pr-3 text-white right-0">
+                <div className="absolute bottom-full w-full pt-5 flex justify-end pr-3 text-white right-0">
                   <BsFillTriangleFill />
                 </div>
                 <Link
