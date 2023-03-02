@@ -8,15 +8,17 @@ import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { client } from "../../utils/client";
+import Mypost from "./Mypost";
 
 const Content = () => {
   const [singleUser, setSingleUser] = useState({});
+  const [myPosts, setMyPosts] = useState([]);
   const params = useParams();
   const user = useSelector((state) => state.user.user);
 
   useEffect(() => {
     getSingleUser();
-
+    getMyPosts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.id]);
 
@@ -26,6 +28,17 @@ const Content = () => {
       const query = `*[_type == "user" && _id == "${params.id}"][0]`;
       const results = await client.fetch(query);
       setSingleUser(results);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  //Get MyPosts
+  const getMyPosts = async () => {
+    try {
+      const query = `*[_type == "post" && postedBy.userId =="${params.id}"]`;
+      const results = await client.fetch(query);
+
+      setMyPosts(results);
     } catch (error) {
       console.log(error);
     }
@@ -98,6 +111,11 @@ const Content = () => {
       <div className="flex flex-col gap-2 mt-5 mx-auto sm:mx-0">
         <div className="text-xl font-semibold px-20 border-b-2 border-black w-fit">
           Videos
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
+          {myPosts?.map((post, i) => (
+            <Mypost post={post} key={i} />
+          ))}
         </div>
       </div>
     </div>

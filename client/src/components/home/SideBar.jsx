@@ -10,6 +10,7 @@ import { BsPeople } from "react-icons/bs";
 
 const SideBar = () => {
   const [users, setUsers] = useState([]);
+
   const location = useLocation();
   const user = useSelector((state) => state.user.user);
 
