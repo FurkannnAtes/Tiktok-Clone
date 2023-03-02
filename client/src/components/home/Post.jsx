@@ -1,4 +1,3 @@
-import axios from "axios";
 import React from "react";
 
 //icons
@@ -13,8 +12,8 @@ const Post = ({ post, allUsers }) => {
 
   //handleLike
   const handleLike = async () => {
-    if (post.likes.find((i) => i.sub === user.sub)) {
-      const newList = await post.likes.filter((i) => i.sub !== user.sub);
+    if (post.likes.find((i) => i.subId === user.sub)) {
+      const newList = await post.likes.filter((i) => i.subId !== user.sub);
 
       try {
         client.patch(post._id).set({ likes: newList }).commit();
