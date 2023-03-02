@@ -70,10 +70,10 @@ const UploadForm = () => {
                   _id: uniqueId,
                   _type: "post",
                   postedBy: {
-                    userId: user?.sub,
-                    picture: user?.picture,
-                    userName: user?.name,
+                    _type: "postedBy",
+                    _ref: user.sub,
                   },
+                  userId: user.sub,
                   caption: caption,
                   topic: category,
                   videoId: uniqueId,
@@ -185,7 +185,12 @@ const UploadForm = () => {
         </div>
       ) : (
         <label className="flex flex-col gap-5 border-[3px] w-full rounded-md p-5 border-dashed hover:bg-gray-100 cursor-pointer ">
-          <input onChange={uploadVideoHandle} type="file" className="hidden" />
+          <input
+            id="selecFileInput"
+            onChange={uploadVideoHandle}
+            type="file"
+            className="hidden"
+          />
           <div className="flex flex-col gap-2 items-center">
             <SlCloudUpload className="text-5xl text-gray-300" />
             <div className="font-extrabold text-xl">Upload Video</div>
@@ -198,7 +203,7 @@ const UploadForm = () => {
             <div className="text-gray-300 font-semibold">Up to 10 minutes</div>
             <div className="text-gray-300 font-semibold">Less than 2GB</div>
             <div className="bg-mainRed text-white px-5 py-1 mt-2 rounded-md font-semibold">
-              <button onClick={uploadVideoHandle}>Select File</button>
+              <label htmlFor="selecFileInput">Select File</label>
             </div>
           </div>
         </label>

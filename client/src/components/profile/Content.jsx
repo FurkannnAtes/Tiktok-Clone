@@ -35,7 +35,7 @@ const Content = () => {
   //Get MyPosts
   const getMyPosts = async () => {
     try {
-      const query = `*[_type == "post" && postedBy.userId =="${params.id}"]`;
+      const query = `*[_type == "post" && userId =="${params.id}"]`;
       const results = await client.fetch(query);
 
       setMyPosts(results);
