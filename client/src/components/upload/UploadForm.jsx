@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 //icons
 import { SlCloudUpload } from "react-icons/sl";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
@@ -8,17 +8,26 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { client } from "../../utils/client";
+import axios from "axios";
 
+import { useSelector } from "react-redux";
+import { uid } from "uid";
 const UploadForm = () => {
   const [uploadVideo, setUploadVideo] = useState();
-  const [capture, setCapture] = useState("");
+  const [caption, setCaption] = useState("");
   const [category, setCategory] = useState("action");
   const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const user = useSelector((state) => state.user.user);
+
+  const navigate = useNavigate();
 
   //upload video
   const uploadVideoHandle = async (e) => {
     const selectedFile = e.target.files[0];
     const fileTypes = ["video/mp4", "video/webm", "video/ogg"];
+
     if (fileTypes.includes(selectedFile.type)) {
       setIsLoading(true);
       client.assets
@@ -31,22 +40,67 @@ const UploadForm = () => {
           setIsLoading(false);
         });
     } else {
-      falseFileType();
+      falseFileType("False video type");
       setIsLoading(false);
     }
   };
   //Cancel Post
   const handleDiscardPost = () => {
     setUploadVideo();
-    setCapture("");
+    setCaption("");
     setCategory("action");
   };
   //Handle Post
-  const handlePost = (e) => {
+  const handlePost = async (e) => {
     e.preventDefault();
+    if (!uploadVideo || caption.trimStart() === "") {
+      falseFileType("Please fill in the form completely");
+    } else {
+      try {
+        setIsSubmitting(true);
+        await axios.post(
+          `https://${
+            import.meta.env.VITE_PROJECT_ID
+          }.api.sanity.io/v1/data/mutate/production`,
+          {
+            mutations: [
+              {
+                create: {
+                  _type: "post",
+                  userId: user?.sub,
+                  caption: caption,
+                  topic: category,
+                  videoId: uid(),
+                  comments: [],
+                  video: uploadVideo?.url,
+                  likes: [],
+                },
+              },
+            ],
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${import.meta.env.VITE_SANITY_TOKEN}`,
+            },
+          }
+        );
+
+        setUploadVideo();
+        setCaption("");
+        setCategory("action");
+        setIsSubmitting(false);
+        navigate(`/profile/${user?.sub}`);
+      } catch (error) {
+        console.log(error);
+        falseFileType("Failed to share post");
+        setIsSubmitting(false);
+      }
+    }
   };
 
-  const falseFileType = () => toast.error("False video type");
+  const falseFileType = (message) => toast.error(message);
+
   return (
     <div className="w-full flex items-center justify-center p-5">
       <ToastContainer
@@ -73,12 +127,12 @@ const UploadForm = () => {
             <div className="flex flex-col justify-between h-auto">
               <div>
                 <label className="flex flex-col gap-1">
-                  <div>Capture</div>
+                  <div>Caption</div>
                   <input
                     className="outline-none border rounded-sm py-1"
                     type="text"
-                    value={capture}
-                    onChange={(e) => setCapture(e.target.value)}
+                    value={caption}
+                    onChange={(e) => setCaption(e.target.value)}
                   />
                 </label>
                 <label className="flex flex-col gap-1">
@@ -109,7 +163,11 @@ const UploadForm = () => {
                   type="submit"
                   className="bg-mainRed boder border-mainRed text-white w-[100px] px-4 py-1  rounded-sm"
                 >
-                  Post
+                  {isSubmitting ? (
+                    <AiOutlineLoading3Quarters className="animate-spin mx-auto" />
+                  ) : (
+                    "Post"
+                  )}
                 </button>
               </div>
             </div>
@@ -134,7 +192,7 @@ const UploadForm = () => {
             <div className="text-gray-300 font-semibold">Up to 10 minutes</div>
             <div className="text-gray-300 font-semibold">Less than 2GB</div>
             <div className="bg-mainRed text-white px-5 py-1 mt-2 rounded-md font-semibold">
-              <button>Select File</button>
+              <button onClick={uploadVideoHandle}>Select File</button>
             </div>
           </div>
         </label>

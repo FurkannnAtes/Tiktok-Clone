@@ -17,11 +17,14 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const userValid = ["/upload"];
+
   useEffect(() => {
-    if (!user.name) {
+    if (!user.name && userValid.includes(location.pathname)) {
       navigate("/");
     }
-  }, [navigate, user]);
+  }, [location.pathname, navigate, user, userValid]);
 
   //check user login
   const handleUploadLink = () => {
@@ -57,9 +60,12 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <button className="flex gap-2 justify-center items-center font-semibold border py-2 w-[130px] hover:bg-gray-200 duration-300">
+          <button
+            onClick={() => handleUploadLink()}
+            className="flex gap-2 justify-center items-center font-semibold border py-2 w-[130px] hover:bg-gray-200 duration-300"
+          >
             <AiOutlinePlus />
-            <div onClick={() => handleUploadLink()}>Upload</div>
+            <div>Upload</div>
           </button>
           {user.name ? (
             <div className="relative group">

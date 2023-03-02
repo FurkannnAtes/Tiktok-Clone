@@ -1,14 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 //icons
 import { RiShareForwardLine } from "react-icons/ri";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 //toastify
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { client } from "../../utils/client";
 
 const Content = () => {
+  const [singleUser, setSingleUser] = useState({});
   const params = useParams();
+  const user = useSelector((state) => state.user.user);
+
+  useEffect(() => {
+    getSingleUser();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params.id]);
+
+  //Get Single User
+  const getSingleUser = async () => {
+    try {
+      const query = `*[_type == "user" && _id == "${params.id}"][0]`;
+      const results = await client.fetch(query);
+      setSingleUser(results);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleCopy = () => {
     navigator.clipboard.writeText(`http://localhost:5173/profile/${params.id}`);
     copyToastify();
@@ -33,17 +55,21 @@ const Content = () => {
           <div className="flex items-center gap-2">
             <img
               className="w-28 h-28 rounded-full"
-              src="https://p16-sign-va.tiktokcdn.com/musically-maliva-obj/1646315618666501~c5_100x100.jpeg?x-expires=1677780000&x-signature=Y4Sg8Ha997BitYsMMCFbqeSn4WU%3D"
+              src={singleUser?.picture}
               alt=""
             />
             <div className="flex flex-col gap-2">
-              <div className="text-2xl font-semibold">willsmith</div>
-              <div>Will Smith</div>
+              <div className="text-2xl font-semibold">
+                {singleUser?.userName}
+              </div>
+              <div>{singleUser?.userName}</div>
               <div>
                 {" "}
-                <button className="flex justify-center gap-2 items-center font-semibold text-white bg-mainRed border py-1 w-[200px] hover:bg-[#e7314f] text-lg duration-300 rounded-md">
-                  Follow
-                </button>
+                {singleUser?.subId === user?.sub ? null : (
+                  <button className="flex justify-center gap-2 items-center font-semibold text-white bg-mainRed border py-1 w-[200px] hover:bg-[#e7314f] text-lg duration-300 rounded-md">
+                    Follow
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -53,15 +79,15 @@ const Content = () => {
         </div>
         <div className="flex flex-col sm:flex-row items-center gap-5 text-lg">
           <div className="flex items-center gap-2">
-            <strong>27</strong>
+            <strong>{singleUser?.follows?.length}</strong>
             <div>Takip Edilen</div>
           </div>
           <div className="flex items-center gap-2">
-            <strong>73M</strong>
+            <strong>{singleUser?.followers?.length}</strong>
             <div>Takipçiler</div>
           </div>
           <div className="flex items-center gap-2">
-            <strong>510M</strong>
+            <strong>{singleUser?.likes?.length}</strong>
             <div>Beğeniler</div>
           </div>
         </div>

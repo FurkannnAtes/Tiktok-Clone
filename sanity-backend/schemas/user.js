@@ -9,14 +9,47 @@ export default {
       type: 'string',
     },
     {
-      name: 'image',
-      title: 'Image',
+      name: 'picture',
+      title: 'picture',
       type: 'string',
     },
     {
       name: 'subId',
       title: 'ID',
       type: 'string',
+    },
+    {
+      name: 'follows',
+      title: 'Follows',
+      type: 'array',
+      of: [
+        {
+          type: 'reference',
+          to: [{type: 'user'}],
+        },
+      ],
+    },
+    {
+      name: 'follower',
+      title: 'Follower',
+      type: 'array',
+      of: [
+        {
+          type: 'reference',
+          to: [{type: 'user'}],
+        },
+      ],
+    },
+    {
+      name: 'likes',
+      title: 'Likes',
+      type: 'array',
+      of: [
+        {
+          type: 'reference',
+          to: [{type: 'user'}],
+        },
+      ],
     },
   ],
 }

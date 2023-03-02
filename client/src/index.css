@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+body{
+    user-select: none;
+}
 
 .wrapper{
     max-width: 1150px;
@@ -32,3 +35,5 @@
     background-color: transparent;
     width: 0px;
    }
+
+  

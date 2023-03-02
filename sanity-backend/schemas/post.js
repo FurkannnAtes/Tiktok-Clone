@@ -11,7 +11,7 @@ export default {
     {
       name: 'video',
       title: 'Video',
-      type: 'file',
+      type: 'string',
       options: {
         hotspot: true,
       },
@@ -22,10 +22,11 @@ export default {
       type: 'string',
     },
     {
-      name: 'postedBy',
-      title: 'PostedBy',
-      type: 'postedBy',
+      name: 'videoId',
+      title: 'Video Id',
+      type: 'string',
     },
+
     {
       name: 'likes',
       title: 'Likes',
