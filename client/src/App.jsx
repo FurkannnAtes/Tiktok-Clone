@@ -5,6 +5,7 @@ import Navbar from "./components/layout/Navbar";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import Upload from "./pages/Upload";
+import Post from "./pages/Post";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/profile/:id" element={<Profile />} />
           <Route path="/upload" element={<Upload />} />
+          <Route path="/post/:id" element={<Post />} />
         </Routes>
       </BrowserRouter>
     </GoogleOAuthProvider>
