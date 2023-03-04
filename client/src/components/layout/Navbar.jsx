@@ -1,17 +1,17 @@
 import React, { useEffect } from "react";
-import { GoogleLogin } from "@react-oauth/google";
+
 import { useDispatch, useSelector } from "react-redux";
-import { createOrGetUser, logout } from "../../store/Auth";
+
 import { Link, useLocation, useNavigate } from "react-router-dom";
 //icons
 import { FaTiktok } from "react-icons/fa";
 import { AiOutlinePlus, AiOutlineUser } from "react-icons/ai";
 import { BsFillTriangleFill, BsSearch } from "react-icons/bs";
 import { BiLogOut } from "react-icons/bi";
-import { hide, show, toggle } from "../../store/showAuth";
+import { show, toggle } from "../../store/showAuth";
+import { logout } from "../../store/Auth";
 
 const Navbar = () => {
-  const showAuth = useSelector((state) => state.showAuth.showAuth);
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
   const location = useLocation();
@@ -110,24 +110,6 @@ const Navbar = () => {
               <div>Sing in</div>
             </button>
           )}
-        </div>
-      </div>
-      <div
-        onClick={() => dispatch(hide())}
-        className={`${
-          showAuth ? "flex " : "hidden"
-        } fixed top-0 left-0 z-30 backdrop-blur-md w-screen bg-transparent h-screen items-center justify-center`}
-      >
-        <div className="bg-white p-5 rounded-lg">
-          <GoogleLogin
-            onSuccess={(credentialResponse) => {
-              dispatch(createOrGetUser(credentialResponse));
-              dispatch(hide());
-            }}
-            onError={() => {
-              console.log("Login Failed");
-            }}
-          />
         </div>
       </div>
     </div>

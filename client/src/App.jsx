@@ -6,12 +6,14 @@ import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import Upload from "./pages/Upload";
 import Post from "./pages/Post";
+import GoogleAuthWrapper from "./components/layout/GoogleAuthWrapper";
 
 function App() {
   return (
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLEID}>
       <BrowserRouter>
         <Navbar />
+        <GoogleAuthWrapper />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/profile/:id" element={<Profile />} />
