@@ -1,6 +1,6 @@
 import React from "react";
-import SideBar from "../components/home/SideBar";
-import UploadForm from "../components/upload/UploadForm";
+import SideBar from "@/components/layout/SideBar";
+import UploadForm from "./components/UploadForm";
 
 const Upload = () => {
   return (

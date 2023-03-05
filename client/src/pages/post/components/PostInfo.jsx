@@ -4,15 +4,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { BsFillChatDotsFill, BsSuitHeartFill } from "react-icons/bs";
 import { RiShareForwardLine } from "react-icons/ri";
 
-import { show } from "../../store/showAuth";
+import { show } from "@/store/showAuth";
 import { uid } from "uid";
 //toastify
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { client } from "../../utils/client";
+import { client } from "@/utils/client";
 import Comment from "./Comment";
 const PostInfo = ({ params, post, postedByUser }) => {
   const [newComment, setNewComments] = useState("");
+
   const [currentComments, setCurrentComments] = useState([]);
   const [likes, setLikes] = useState([]);
   const user = useSelector((state) => state.user.user);
@@ -22,7 +23,7 @@ const PostInfo = ({ params, post, postedByUser }) => {
   useEffect(() => {
     getCurrentComments();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [params.id]);
 
   //Get Current comment
   const getCurrentComments = async () => {

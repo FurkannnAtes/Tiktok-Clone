@@ -4,11 +4,15 @@ import { Link } from "react-router-dom";
 import { BsFillChatDotsFill, BsSuitHeartFill } from "react-icons/bs";
 import { IoMdShareAlt } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
-import { client } from "../../utils/client";
-import { show } from "../../store/showAuth";
+import { client } from "@/utils/client";
+import { show } from "@/store/showAuth";
 
+//toastify
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const Post = ({ post, allUsers }) => {
   const [likes, setLikes] = useState([]);
+  const [followers, setFollowers] = useState([]);
 
   const user = useSelector((state) => state.user.user);
   const postedByUser = allUsers?.filter((i) => i.subId === post.postedBy._ref);
@@ -57,6 +61,36 @@ const Post = ({ post, allUsers }) => {
       }
     }
   };
+
+  //follow or unfollow
+  const followOrUnfollow = async () => {
+    try {
+      const query = `*[_type == "user" && _id == "${post.userId}"][0].followers`;
+      const currentFollowers = await client.fetch(query);
+      const newFollowers = currentFollowers.find((i) => i._key === user.sub)
+        ? currentFollowers.filter((i) => i._key !== user.sub)
+        : [
+            ...currentFollowers,
+            { _type: "reference", _ref: user.sub, _key: user.sub },
+          ];
+      const res = await client
+        .patch(post.userId)
+        .set({
+          followers: newFollowers,
+        })
+        .commit();
+      setFollowers(res.followers);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //copy link
+  const handleCopy = () => {
+    navigator.clipboard.writeText(`http://localhost:5173/post/${post._id}`);
+    copyToastify();
+  };
+  const copyToastify = () => toast.success("Link Copied");
   return (
     <div className="py-5 border-b flex flex-col gap-1">
       <div className="flex items-center justify-between gap-5">
@@ -74,8 +108,20 @@ const Post = ({ post, allUsers }) => {
           </div>
         </div>
         <div>
-          {postedByUser[0]?.subId === user.sub ? null : (
-            <button className="border-mainRed border p-1 px-2 w-full rounded-md  font-semibold text-mainRed hover:bg-[#FFF3F5] duration-300 ">
+          {postedByUser[0]?.subId === user.sub ? null : followers?.find(
+              (i) => i._key === user.sub
+            ) ? (
+            <button
+              onClick={followOrUnfollow}
+              className="border-mainRed border p-1 px-2 w-full rounded-md  font-semibold text-mainRed hover:bg-[#FFF3F5] duration-300 "
+            >
+              Unfollow
+            </button>
+          ) : (
+            <button
+              onClick={followOrUnfollow}
+              className="border-mainRed border p-1 px-2 w-full rounded-md  font-semibold text-mainRed hover:bg-[#FFF3F5] duration-300 "
+            >
               Follow
             </button>
           )}
@@ -102,15 +148,30 @@ const Post = ({ post, allUsers }) => {
             <BsSuitHeartFill className="text-2xl" />
           </button>
           <div className="text-sm font-semibold">{likes?.length}</div>
-          <button className="bg-gray-200 p-4 rounded-full">
+          <Link
+            to={`/post/${post._id}`}
+            className="bg-gray-200 p-4 rounded-full cursor-pointer"
+          >
             <BsFillChatDotsFill className="text-2xl" />
-          </button>
+          </Link>
           <div className="text-sm font-semibold">{post.comments?.length}</div>
-          <button className="bg-gray-200 p-4 rounded-full">
+          <button onClick={handleCopy} className="bg-gray-200 p-4 rounded-full">
             <IoMdShareAlt className="text-2xl" />
           </button>
         </div>
       </div>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 };

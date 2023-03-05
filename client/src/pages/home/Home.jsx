@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 
-import Post from "../components/home/Post";
-import SideBar from "../components/home/SideBar";
-import { client } from "../utils/client";
+import Post from "./components/Post";
+import SideBar from "@/components/layout/SideBar";
+import { client } from "@/utils/client";
 
 const Home = () => {
   const [allPosts, setAllPosts] = useState([]);
@@ -15,7 +15,7 @@ const Home = () => {
   //Get All Posts
   const getAllPosts = async () => {
     try {
-      const query = `*[_type == "post"]`;
+      const query = `*[_type == "post"] | order(_createdAt desc)`;
       const results = await client.fetch(query);
       setAllPosts(results);
     } catch (error) {

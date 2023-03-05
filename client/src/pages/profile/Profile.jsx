@@ -1,7 +1,7 @@
 import React from "react";
 
-import SideBar from "../components/home/SideBar";
-import Content from "../components/profile/Content";
+import SideBar from "@/components/layout/SideBar";
+import Content from "./components/Content";
 const Profile = () => {
   return (
     <div className=" flex justify-between md:px-5">

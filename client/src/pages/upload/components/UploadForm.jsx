@@ -7,7 +7,7 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { client } from "../../utils/client";
+import { client } from "@/utils/client";
 import axios from "axios";
 
 import { useSelector } from "react-redux";

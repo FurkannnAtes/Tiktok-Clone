@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { client } from "../../utils/client";
+import { client } from "@/utils/client";
 
 //icons
 import { AiFillHome } from "react-icons/ai";

@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 //toastify
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { client } from "../../utils/client";
+import { client } from "@/utils/client";
 import Mypost from "./Mypost";
 
 const Content = () => {

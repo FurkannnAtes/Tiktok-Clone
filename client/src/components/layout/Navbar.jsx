@@ -8,8 +8,8 @@ import { FaTiktok } from "react-icons/fa";
 import { AiOutlinePlus, AiOutlineUser } from "react-icons/ai";
 import { BsFillTriangleFill, BsSearch } from "react-icons/bs";
 import { BiLogOut } from "react-icons/bi";
-import { show, toggle } from "../../store/showAuth";
-import { logout } from "../../store/Auth";
+import { show, toggle } from "@/store/showAuth";
+import { logout } from "@/store/Auth";
 
 const Navbar = () => {
   const user = useSelector((state) => state.user.user);

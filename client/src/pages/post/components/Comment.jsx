@@ -2,7 +2,7 @@ import React from "react";
 
 import { AiOutlineClose } from "react-icons/ai";
 import { useSelector } from "react-redux";
-import { client } from "../../utils/client";
+import { client } from "@/utils/client";
 const Comment = ({ comment, post, currentComments, getCurrentComments }) => {
   const user = useSelector((state) => state.user.user);
 

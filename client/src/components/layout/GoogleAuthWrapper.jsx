@@ -1,8 +1,8 @@
 import { GoogleLogin } from "@react-oauth/google";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createOrGetUser } from "../../store/Auth";
-import { hide } from "../../store/showAuth";
+import { createOrGetUser } from "@/store/Auth";
+import { hide } from "@/store/showAuth";
 
 const GoogleAuthWrapper = () => {
   const dispatch = useDispatch();
