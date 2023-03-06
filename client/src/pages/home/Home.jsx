@@ -2,36 +2,15 @@ import React, { useEffect, useState } from "react";
 
 import Post from "./components/Post";
 import SideBar from "@/components/layout/SideBar";
-import { client } from "@/utils/client";
+import { getAllPosts, getAllUsers } from "@/helpers/Api";
 
 const Home = () => {
   const [allPosts, setAllPosts] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
   useEffect(() => {
-    getAllPosts();
-    getAllUsers();
+    getAllPosts().then((res) => setAllPosts(res));
+    getAllUsers().then((res) => setAllUsers(res));
   }, []);
-
-  //Get All Posts
-  const getAllPosts = async () => {
-    try {
-      const query = `*[_type == "post"] | order(_createdAt desc)`;
-      const results = await client.fetch(query);
-      setAllPosts(results);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  //Get All Users
-  const getAllUsers = async () => {
-    try {
-      const query = `*[_type == "user"]`;
-      const results = await client.fetch(query);
-      setAllUsers(results);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   return (
     <div className="wrapper flex justify-between md:px-5 ">

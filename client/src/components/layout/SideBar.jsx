@@ -1,12 +1,12 @@
 import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { client } from "@/utils/client";
 
 //icons
 import { AiFillHome } from "react-icons/ai";
 import { HiOutlineVideoCamera } from "react-icons/hi";
 import { BsPeople } from "react-icons/bs";
+import { getAllUsers } from "@/helpers/Api";
 
 const SideBar = () => {
   const [users, setUsers] = useState([]);
@@ -15,18 +15,9 @@ const SideBar = () => {
   const user = useSelector((state) => state.user.user);
 
   useEffect(() => {
-    getUsers();
+    getAllUsers().then((res) => setUsers(res));
   }, [user]);
-  //Get Users
-  const getUsers = async () => {
-    try {
-      const query = `*[_type == "user"]`;
-      const results = await client.fetch(query);
-      setUsers(results);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+
   return (
     <div
       className={`${

@@ -9,29 +9,24 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { client } from "@/utils/client";
 import Mypost from "./Mypost";
+import { followOrUnfollow, getSingleUser } from "@/helpers/Api";
 
 const Content = () => {
   const [singleUser, setSingleUser] = useState({});
   const [myPosts, setMyPosts] = useState([]);
+  const [followers, setFollowers] = useState([]);
   const params = useParams();
   const user = useSelector((state) => state.user.user);
 
   useEffect(() => {
-    getSingleUser();
+    getSingleUser(params.id).then((res) => {
+      setSingleUser(res);
+      setFollowers(res.followers);
+    });
     getMyPosts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.id]);
 
-  //Get Single User
-  const getSingleUser = async () => {
-    try {
-      const query = `*[_type == "user" && _id == "${params.id}"][0]`;
-      const results = await client.fetch(query);
-      setSingleUser(results);
-    } catch (error) {
-      console.log(error);
-    }
-  };
   //Get MyPosts
   const getMyPosts = async () => {
     try {
@@ -79,9 +74,37 @@ const Content = () => {
               <div>
                 {" "}
                 {singleUser?.subId === user?.sub ? null : (
-                  <button className="flex justify-center gap-2 items-center font-semibold text-white bg-mainRed border py-1 w-[200px] hover:bg-[#e7314f] text-lg duration-300 rounded-md">
-                    Follow
-                  </button>
+                  <div>
+                    {singleUser?.subId === user.sub ? null : followers?.find(
+                        (i) => i._key === user.sub
+                      ) ? (
+                      <button
+                        onClick={async () => {
+                          const res = await followOrUnfollow(
+                            singleUser.subId,
+                            user
+                          );
+                          setFollowers(res);
+                        }}
+                        className="border-mainRed border p-1 px-2 w-full rounded-md  font-semibold text-mainRed hover:bg-[#FFF3F5] duration-300 "
+                      >
+                        Unfollow
+                      </button>
+                    ) : (
+                      <button
+                        onClick={async () => {
+                          const res = await followOrUnfollow(
+                            singleUser.subId,
+                            user
+                          );
+                          setFollowers(res);
+                        }}
+                        className="border-mainRed border p-1 px-2 w-full rounded-md  font-semibold text-mainRed hover:bg-[#FFF3F5] duration-300 "
+                      >
+                        Follow
+                      </button>
+                    )}
+                  </div>
                 )}
               </div>
             </div>

@@ -4,6 +4,7 @@ import { client } from "@/utils/client";
 
 import PostVideo from "./components/PostVideo";
 import PostInfo from "./components/PostInfo";
+import { getSinglePost } from "@/helpers/Api";
 const Post = () => {
   const [post, setPost] = useState([]);
   const [prevPostId, setPrevPostId] = useState("");
@@ -12,23 +13,13 @@ const Post = () => {
 
   const params = useParams();
   useEffect(() => {
-    getSinglePost();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    getSinglePost(params.id).then((res) => {
+      setPost(res);
+      getPostedByUser(res.userId);
+      getPreviousPost(res);
+      getNextPost(res);
+    });
   }, [params.id]);
-
-  const getSinglePost = async () => {
-    try {
-      const query = `*[_type == "post" && _id == "${params.id}"]`;
-      const results = await client.fetch(query);
-      setPost(results[0]);
-      getPostedByUser(results[0].postedBy._ref);
-      getPreviusPost(results[0]);
-      getNextPost(results[0]);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   //Get PostedBy User
   const getPostedByUser = async (userId) => {
@@ -42,7 +33,7 @@ const Post = () => {
   };
 
   //Get Previus Post
-  const getPreviusPost = async (post) => {
+  const getPreviousPost = async (post) => {
     try {
       const query = `*[_type == "post" && dateTime(_createdAt) > dateTime('${post._createdAt}')]| order(_createdAt desc)`;
       const results = await client.fetch(query);
