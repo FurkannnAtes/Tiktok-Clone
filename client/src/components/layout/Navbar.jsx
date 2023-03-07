@@ -17,7 +17,7 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const hiddenNavbar = ["/post"];
+  const hiddenNavbar = ["post", "profilePostsDetails"];
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const userValid = ["/upload"];
@@ -40,7 +40,7 @@ const Navbar = () => {
   return (
     <div
       className={`${
-        location.pathname.includes(hiddenNavbar) ? "hidden" : " "
+        hiddenNavbar.includes(location.pathname.split("/")[1]) ? "hidden" : " "
       } border-b  border-[1px]`}
     >
       <div

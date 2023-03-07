@@ -7,9 +7,9 @@ import { useSelector } from "react-redux";
 //toastify
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { client } from "@/utils/client";
+
 import Mypost from "./Mypost";
-import { followOrUnfollow, getSingleUser } from "@/helpers/Api";
+import { followOrUnfollow, getSingleUser, getMyPosts } from "@/helpers/Api";
 
 const Content = () => {
   const [singleUser, setSingleUser] = useState({});
@@ -22,22 +22,9 @@ const Content = () => {
     getSingleUser(params.id).then((res) => {
       setSingleUser(res);
       setFollowers(res.followers);
+      getMyPosts(res._id).then((res) => setMyPosts(res));
     });
-    getMyPosts();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.id]);
-
-  //Get MyPosts
-  const getMyPosts = async () => {
-    try {
-      const query = `*[_type == "post" && userId =="${params.id}"]`;
-      const results = await client.fetch(query);
-
-      setMyPosts(results);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const handleCopy = () => {
     navigator.clipboard.writeText(`http://localhost:5173/profile/${params.id}`);

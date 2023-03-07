@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import Post from "./components/Post";
+import Post from "@/components/Post";
 import SideBar from "@/components/layout/SideBar";
 import { getAllPosts, getAllUsers } from "@/helpers/Api";
 

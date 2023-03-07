@@ -58,6 +58,17 @@ export const getAllPosts = async () => {
   }
 };
 
+//Get My Posts
+export const getMyPosts = async (userId) => {
+  try {
+    const query = `*[_type == "post" && userId == "${userId}"] | order(_createdAt desc)`;
+    const res = await client.fetch(query);
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 //Get Single Post
 export const getSinglePost = async (id) => {
   try {

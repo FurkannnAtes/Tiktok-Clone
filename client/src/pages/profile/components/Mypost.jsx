@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Mypost = ({ post }) => {
   //Hover Stat video
@@ -10,8 +11,12 @@ const Mypost = ({ post }) => {
     e.target.pause();
     e.target.currentTime = 0;
   };
+
   return (
-    <div className="min-h-[350px] rounded-lg">
+    <Link
+      to={`/profilePostsDetails/${post._id}`}
+      className="min-h-[350px] rounded-lg"
+    >
       <video
         onMouseEnter={hoverStartVideo}
         onMouseOut={outPauseVideo}
@@ -19,7 +24,7 @@ const Mypost = ({ post }) => {
         src={post?.video}
         muted
       ></video>
-    </div>
+    </Link>
   );
 };
 

@@ -41,11 +41,13 @@ const Post = ({ post, allUsers }) => {
     <div className="py-5 border-b flex flex-col gap-1">
       <div className="flex items-center justify-between gap-5">
         <div className="flex items-center gap-2">
-          <img
-            className="w-14 h-14 rounded-full"
-            src={postedByUser[0]?.picture}
-            alt=""
-          />
+          <Link to={`/profile/${post.userId}`}>
+            <img
+              className="w-14 h-14 rounded-full"
+              src={postedByUser[0]?.picture}
+              alt=""
+            />
+          </Link>
           <div className="flex flex-col">
             <div className="text-lg font-semibold">
               {postedByUser[0]?.userName}
