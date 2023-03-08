@@ -10,6 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import Mypost from "./Mypost";
 import { followOrUnfollow, getSingleUser, getMyPosts } from "@/helpers/Api";
+import Skeleton from "react-loading-skeleton";
 
 const Content = () => {
   const [singleUser, setSingleUser] = useState({});
@@ -49,15 +50,15 @@ const Content = () => {
         <div className="flex items-start justify-between w-fit gap-10">
           <div className="flex items-center gap-2">
             <img
-              className="w-28 h-28 rounded-full"
+              className="w-28 h-28 bg-gray-600 rounded-full"
               src={singleUser?.picture}
               alt=""
             />
             <div className="flex flex-col gap-2">
               <div className="text-2xl font-semibold">
-                {singleUser?.userName}
+                {singleUser?.userName || <Skeleton className="w-32" />}
               </div>
-              <div>{singleUser?.userName}</div>
+              <div>{singleUser?.userName || <Skeleton className="w-32" />}</div>
               <div>
                 {" "}
                 {singleUser?.subId === user?.sub ? null : (

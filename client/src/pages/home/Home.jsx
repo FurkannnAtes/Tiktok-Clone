@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Post from "@/components/Post";
 import SideBar from "@/components/layout/SideBar";
 import { getAllPosts, getAllUsers } from "@/helpers/Api";
+import Skeletons from "../../components/skeleton/Skeleton";
 
 const Home = () => {
   const [allPosts, setAllPosts] = useState([]);
@@ -20,6 +21,7 @@ const Home = () => {
         {allPosts?.map((post, i) => (
           <Post key={i} post={post} allUsers={allUsers} />
         ))}
+        {allPosts.length === 0 ? <Skeletons type="post" /> : null}
       </div>
     </div>
   );

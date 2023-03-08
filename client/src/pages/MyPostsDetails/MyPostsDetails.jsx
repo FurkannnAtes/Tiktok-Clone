@@ -5,6 +5,7 @@ import { client } from "@/utils/client";
 import PostVideo from "./components/PostVideo";
 import PostInfo from "./components/PostInfo";
 import { getSinglePost } from "@/helpers/Api";
+import Skeletons from "../../components/skeleton/Skeleton";
 const MyPostDetails = () => {
   const [post, setPost] = useState([]);
   const [prevPostId, setPrevPostId] = useState("");

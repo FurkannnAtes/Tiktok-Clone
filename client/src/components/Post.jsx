@@ -43,7 +43,7 @@ const Post = ({ post, allUsers }) => {
         <div className="flex items-center gap-2">
           <Link to={`/profile/${post.userId}`}>
             <img
-              className="w-14 h-14 rounded-full"
+              className="w-14 h-14 rounded-full bg-slate-300 "
               src={postedByUser[0]?.picture}
               alt=""
             />

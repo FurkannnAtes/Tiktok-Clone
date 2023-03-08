@@ -8,6 +8,8 @@ import { HiOutlineVideoCamera } from "react-icons/hi";
 import { BsPeople } from "react-icons/bs";
 import { getAllUsers } from "@/helpers/Api";
 
+import Skeletons from "../skeleton/Skeleton";
+
 const SideBar = () => {
   const [users, setUsers] = useState([]);
 
@@ -68,6 +70,7 @@ const SideBar = () => {
             </div>
           </Link>
         ))}
+        {users.length === 0 ? <Skeletons type="sideBar" /> : null}
       </div>
     </div>
   );

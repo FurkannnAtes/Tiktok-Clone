@@ -19,6 +19,8 @@ import {
   getSingleUser,
 } from "@/helpers/Api";
 import { Link } from "react-router-dom";
+import Skeleton from "react-loading-skeleton";
+import Skeletons from "../../../components/skeleton/Skeleton";
 
 const PostInfo = ({ params, post, postedByUser }) => {
   const [newComment, setNewComments] = useState("");
@@ -66,17 +68,17 @@ const PostInfo = ({ params, post, postedByUser }) => {
               <Link to={`/profile/${post.userId}`}>
                 <img
                   src={postedByUser?.picture}
-                  className="h-16 rounded-full"
+                  className="h-16 rounded-full w-16 bg-gray-600 "
                   alt=""
                 />
               </Link>
               <div className="flex flex-col ">
                 <div className="text-lg font-semibold">
-                  {postedByUser?.userName}
+                  {postedByUser?.userName || <Skeleton className="w-32" />}
                 </div>
-                <div className="text-sm">
-                  @{postedByUser?.userName} -{" "}
-                  {postedByUser?._updatedAt?.split("", 10)}
+                <div className="text-sm flex items-center gap-2">
+                  {postedByUser?.userName || <Skeleton className="w-32" />}
+                  <div>{postedByUser?._updatedAt?.split("", 10)}</div>
                 </div>
               </div>
             </div>
@@ -109,9 +111,9 @@ const PostInfo = ({ params, post, postedByUser }) => {
             </div>
           )}
         </div>
-        <div>{post?.caption}</div>
+        <div>{post?.caption || <Skeleton className="w-32" />}</div>
         <div className="first-letter:uppercase hover:underline cursor-pointer">
-          #{post?.topic}
+          {post?.topic || <Skeleton className="w-32" />}
         </div>
 
         <div className="flex justify-between items-center">
@@ -141,6 +143,7 @@ const PostInfo = ({ params, post, postedByUser }) => {
           </div>
         </div>
       </div>
+
       <div className="h-full justify-end overflow-y-auto py-5 bg-[#F8F8F8] border-y p-5 flex flex-col-reverse gap-5 commentScroll">
         {currentComments?.map((comment, i) => (
           <Comment
